@@ -1,0 +1,51 @@
+what,kind,bundleId,bundleVersion,description,time
+started,bundle,org.eclipse.wst.sse.ui,1.3.2.v201201041522,"org.eclipse.wst.sse.ui",1360436501397
+started,bundle,org.eclipse.wst.validation,1.2.303.v201202090300,"org.eclipse.wst.validation",1360436501457
+started,bundle,org.eclipse.wst.web,1.1.501.v201201190400,"org.eclipse.wst.web",1360436501510
+started,bundle,org.eclipse.wst.xml.core,1.1.602.v201201091944,"org.eclipse.wst.xml.core",1360436501526
+started,bundle,org.eclipse.wst.xml.ui,1.1.202.v201112071516,"org.eclipse.wst.xml.ui",1360436501580
+started,bundle,org.eclipse.wst.xsl.core,1.1.100.v201102270516,"org.eclipse.wst.xsl.core",1360436501625
+started,bundle,org.eclipse.wst.xsl.ui,1.1.200.v201103082057,"org.eclipse.wst.xsl.ui",1360436501658
+started,bundle,com.android.ide.eclipse.adt,20.0.3.v201208082019-427395,"com.android.ide.eclipse.adt",1360436501658
+started,bundle,com.android.ide.eclipse.base,20.0.3.v201208082019-427395,"com.android.ide.eclipse.base",1360436501660
+started,bundle,org.eclipse.cdt.codan.ui.cxx,2.0.0.201202111925,"org.eclipse.cdt.codan.ui.cxx",1360436501682
+started,bundle,org.eclipse.cdt.core,5.3.2.201202111925,"org.eclipse.cdt.core",1360436501713
+started,bundle,org.eclipse.cdt.make.core,7.1.2.201202111925,"org.eclipse.cdt.make.core",1360436501722
+started,bundle,org.eclipse.cdt.make.ui,7.1.2.201202111925,"org.eclipse.cdt.make.ui",1360436501789
+started,bundle,org.eclipse.cdt.managedbuilder.core,8.0.2.201202111925,"org.eclipse.cdt.managedbuilder.core",1360436501818
+started,bundle,org.eclipse.cdt.ui,5.3.2.201202111925,"org.eclipse.cdt.ui",1360436501864
+os,sysinfo,,,"win32",1360436501875
+arch,sysinfo,,,"x86_64",1360436501875
+ws,sysinfo,,,"win32",1360436501875
+locale,sysinfo,,,"en_US",1360436501875
+processors,sysinfo,,,"4",1360436501875
+java.runtime.name,sysinfo,,,"Java(TM) SE Runtime Environment",1360436501875
+java.runtime.version,sysinfo,,,"1.7.0_07-b11",1360436501875
+java.specification.name,sysinfo,,,"Java Platform API Specification",1360436501875
+java.specification.vendor,sysinfo,,,"Oracle Corporation",1360436501875
+java.specification.version,sysinfo,,,"1.7",1360436501875
+java.vendor,sysinfo,,,"Oracle Corporation",1360436501875
+java.version,sysinfo,,,"1.7.0_07",1360436501875
+java.vm.info,sysinfo,,,"mixed mode",1360436501875
+java.vm.name,sysinfo,,,"Java HotSpot(TM) 64-Bit Server VM",1360436501875
+java.vm.specification.name,sysinfo,,,"Java Virtual Machine Specification",1360436501875
+java.vm.specification.vendor,sysinfo,,,"Oracle Corporation",1360436501875
+java.vm.specification.version,sysinfo,,,"1.7",1360436501875
+java.vm.vendor,sysinfo,,,"Oracle Corporation",1360436501875
+java.vm.version,sysinfo,,,"23.3-b01",1360436501875
+started,bundle,org.eclipse.cdt.codan.core.cxx,1.0.0.201202111925,"org.eclipse.cdt.codan.core.cxx",1360436502103
+started,bundle,org.eclipse.cdt.codan.core,2.0.0.201202111925,"org.eclipse.cdt.codan.core",1360436502175
+started,bundle,org.eclipse.cdt.codan.checkers,1.0.1.201202111925,"org.eclipse.cdt.codan.checkers",1360436502234
+deactivated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360436548143
+activated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360436553283
+deactivated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360436627551
+activated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360438843136
+deactivated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360438847445
+activated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360447928416
+executed,command,org.eclipse.ui,3.7.0.v20110928-1505,"org.eclipse.ui.file.import",1360447928429
+deactivated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360447932925
+activated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360448038217
+executed,command,org.eclipse.ui,3.7.0.v20110928-1505,"org.eclipse.ui.file.import",1360448038231
+deactivated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360448042524
+activated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360448052162
+deactivated,workbench,org.eclipse.ui.workbench,3.7.1.v20120104-1859,"",1360448057399
