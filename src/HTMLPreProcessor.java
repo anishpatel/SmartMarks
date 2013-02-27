@@ -3,6 +3,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,11 +94,11 @@ public class HTMLPreProcessor {
 		  }
 		return contentWithoutHyperlinks;
 	}
-	public static HashMap<String, String> TokenizeHTMLDocument(String content) {
+	public static Map<String, String> TokenizeHTMLDocument(String content) {
 		content = content.replaceAll("\n", "");
 		String htmlTitle = "", htmlBody = "";
 
-		HashMap<String, String> htmlContentMap = new HashMap<String, String>();
+		Map<String, String> htmlContentMap = new HashMap<String, String>();
 		Matcher matcher = HTMLConstants.HTML_TITLE_REGEX.matcher(content);
 		if (matcher.find() && matcher.groupCount() > 0) {
 			htmlTitle = matcher.group(1);

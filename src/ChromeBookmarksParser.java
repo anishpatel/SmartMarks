@@ -36,11 +36,11 @@ public class ChromeBookmarksParser
 		}
 	}
 	
-	public void parse()
+	public void parse(String filePath)
 	{
 		JsonReader reader = null;
 		 try {
-			reader = new JsonReader(new FileReader("Bookmarks"));
+			reader = new JsonReader(new FileReader(filePath));
 			reader.beginObject();
 			recur_parse(reader);
 			reader.endObject();
@@ -67,7 +67,7 @@ public class ChromeBookmarksParser
 	public static void main(String[] args)
 	{
 		ChromeBookmarksParser cbp = new ChromeBookmarksParser();
-		cbp.parse();
+		cbp.parse("Bookmarks");
 		List<String> urls = cbp.getUrls();
 		for (String url : urls) {
 			System.out.println(url);

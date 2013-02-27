@@ -32,6 +32,7 @@ public class Crawler {
 				String pageURL = urlMap.get(id);
 				Crawler crawler = new Crawler();
 				String pageContents = crawler.Crawl(pageURL);
+				pageContents = pageContents == null ? "" : pageContents;
 
 				System.out.println("weblinkList:" + crawler.weblinkList.size());
 				Object arr[] = crawler.weblinkList.toArray();
@@ -41,7 +42,7 @@ public class Crawler {
 				}
 
 				System.out.println("pageContents:" + pageContents);
-				HashMap<String, String> htmlContentMap = HTMLPreProcessor
+				Map<String, String> htmlContentMap = HTMLPreProcessor
 						.TokenizeHTMLDocument(pageContents);
 				htmlContentMap.put(XMLConstants.XML_ATTR_ID, ""+id);
 				bookmarkResultMap.put(id, htmlContentMap);

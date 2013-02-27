@@ -10,7 +10,8 @@ public class Main
 	{
 		// get bookmarks from Chrome's Bookmarks JSON file
 		ChromeBookmarksParser cbp = new ChromeBookmarksParser();
-		cbp.parse();
+		String bookmarksFilePath = "Bookmarks";
+		cbp.parse(bookmarksFilePath);
 		List<String> urlList = cbp.getUrls();
 		Map<Integer,String> urlMap = new HashMap<Integer,String>();
 		List<Integer> bookmarkIdList = new ArrayList<Integer>(urlList.size());
