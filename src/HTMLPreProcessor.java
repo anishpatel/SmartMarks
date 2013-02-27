@@ -1,9 +1,16 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,6 +119,47 @@ public class HTMLPreProcessor {
 			htmlBody = htmlBody.replace(HTMLConstants.HTML_BODY_END, "");
 		}
 
+		// remove all non alpha characters from title and body
+		htmlTitle = htmlTitle.replaceAll("[^A-Za-z\\s]", " ");
+		htmlBody = htmlBody.replaceAll("[^A-Za-z\\s]", " ");
+		
+		// remove any tokens with no more than 2 characters
+		htmlBody = htmlBody.replaceAll("[A-Za-z]{1,2}", "");
+		System.out.println(htmlBody.length());
+		
+		// replace multiple adjacent spaces with a single space
+		htmlTitle = htmlTitle.replaceAll("\\s+", " ").trim();
+		htmlBody = htmlBody.replaceAll("\\s+", " ").trim();
+		
+		// read stopwords
+		Set<String> stopwords = new HashSet<String>();
+		try {
+			Scanner stopwordsScanner = new Scanner(new File("stopwords.txt"));
+			while (stopwordsScanner.hasNext()) {
+				stopwords.add(stopwordsScanner.next());
+			}
+			stopwordsScanner.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// tokenize body
+		List<String> htmlBodyTokens = Arrays.asList(htmlBody.split(" ")); //TODO make linked list
+		Iterator<String> htmlBodyTokensIter = htmlBodyTokens.iterator();
+		while (htmlBodyTokensIter.hasNext()) {
+			String token = htmlBodyTokensIter.next();
+			if (stopwords.contains(token)) {
+				htmlBodyTokensIter.remove();
+			}
+		}
+	    StringBuilder sb = new StringBuilder();
+	    String sep = " ";
+	    for(String token : htmlBodyTokens) {
+	        sb.append(sep).append(token);
+	    }
+	    htmlBody = sb.toString();
+		
 		htmlContentMap.put(HTMLConstants.HTML_TITLE, htmlTitle);
 		htmlContentMap.put(HTMLConstants.HTML_BODY, htmlBody);
 

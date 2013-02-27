@@ -49,9 +49,9 @@ public class Crawler {
 
 				String htmlBody = htmlContentMap
 						.remove(HTMLConstants.HTML_BODY);
-				System.out.println("Title:"
+/*				System.out.println("Title:"
 						+ htmlContentMap.get(HTMLConstants.HTML_TITLE));
-				System.out.println("Body:" + htmlBody);
+				System.out.println("Body:" + htmlBody);*/
 				String pageContentsWithoutScripts = HTMLPreProcessor
 						.RemoveScriptFromHTML(htmlBody);
 				String pageContentsWithoutHTMLelements = HTMLPreProcessor
@@ -62,7 +62,7 @@ public class Crawler {
 				htmlContentMap.put(HTMLConstants.HTML_BODY,
 						pageContentsWithoutHyperlink);
 
-				System.out.println("pageContentsWithoutScripts:"
+/*				System.out.println("pageContentsWithoutScripts:"
 						+ pageContentsWithoutScripts);
 				System.out.println("pageContentsWithoutHTMLelements:"
 						+ pageContentsWithoutHTMLelements);
@@ -77,7 +77,7 @@ public class Crawler {
 				System.out.println("Without HTML:\t"
 						+ pageContentsWithoutHTMLelements.length());
 				System.out.println("Plain Text:\t"
-						+ pageContentsWithoutHyperlink.length());
+						+ pageContentsWithoutHyperlink.length());*/
 
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block

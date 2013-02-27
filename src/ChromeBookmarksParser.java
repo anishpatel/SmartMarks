@@ -72,5 +72,6 @@ public class ChromeBookmarksParser
 		for (String url : urls) {
 			System.out.println(url);
 		}
+		System.out.println(urls.size());
 	}
 }
