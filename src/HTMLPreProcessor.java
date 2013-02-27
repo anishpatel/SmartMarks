@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -124,12 +125,13 @@ public class HTMLPreProcessor {
 		htmlBody = htmlBody.replaceAll("[^A-Za-z\\s]", " ");
 		
 		// remove any tokens with no more than 2 characters
-		htmlBody = htmlBody.replaceAll("[A-Za-z]{1,2}", "");
-		System.out.println(htmlBody.length());
+//		htmlBody = htmlBody.replaceAll("[A-Za-z]{1,2}", "");
+		htmlBody = htmlBody.replaceAll("\\b[\\w']{1,2}\\b", "");
+		System.out.println("length1=" + htmlBody.length());
 		
 		// replace multiple adjacent spaces with a single space
-		htmlTitle = htmlTitle.replaceAll("\\s+", " ").trim();
-		htmlBody = htmlBody.replaceAll("\\s+", " ").trim();
+		htmlTitle = htmlTitle.replaceAll("\\s{2,}", " ").trim();
+		htmlBody = htmlBody.replaceAll("\\s{2,}", " ").trim();
 		
 		// read stopwords
 		Set<String> stopwords = new HashSet<String>();
@@ -145,20 +147,30 @@ public class HTMLPreProcessor {
 		}
 		
 		// tokenize body
-		List<String> htmlBodyTokens = Arrays.asList(htmlBody.split(" ")); //TODO make linked list
-		Iterator<String> htmlBodyTokensIter = htmlBodyTokens.iterator();
+		List<String> htmlBodyTokens = new LinkedList<String>(Arrays.asList(htmlBody.split(" ")));
+		System.out.println(htmlBodyTokens.size());
+/*		Iterator<String> htmlBodyTokensIter = htmlBodyTokens.iterator();
 		while (htmlBodyTokensIter.hasNext()) {
 			String token = htmlBodyTokensIter.next();
 			if (stopwords.contains(token)) {
 				htmlBodyTokensIter.remove();
 			}
+		}*/
+		for (int i = 0; i < htmlBodyTokens.size(); ++i) {
+			String token = htmlBodyTokens.get(i);
+			if (stopwords.contains(token)) {
+				htmlBodyTokens.remove(i);
+				--i;
+			}
 		}
+		System.out.println(htmlBodyTokens.size());
 	    StringBuilder sb = new StringBuilder();
 	    String sep = " ";
 	    for(String token : htmlBodyTokens) {
 	        sb.append(sep).append(token);
 	    }
 	    htmlBody = sb.toString();
+	    System.out.println("length2=" + htmlBody.length());
 		
 		htmlContentMap.put(HTMLConstants.HTML_TITLE, htmlTitle);
 		htmlContentMap.put(HTMLConstants.HTML_BODY, htmlBody);

@@ -34,14 +34,14 @@ public class Crawler {
 				String pageContents = crawler.Crawl(pageURL);
 				pageContents = pageContents == null ? "" : pageContents;
 
-				System.out.println("weblinkList:" + crawler.weblinkList.size());
+/*				System.out.println("weblinkList:" + crawler.weblinkList.size());
 				Object arr[] = crawler.weblinkList.toArray();
 
 				for (int i = 0; i < crawler.weblinkList.size(); i++) {
 					System.out.println("weblinkList (" + i + "):" + arr[i]);
 				}
 
-				System.out.println("pageContents:" + pageContents);
+				System.out.println("pageContents:" + pageContents);*/
 				Map<String, String> htmlContentMap = HTMLPreProcessor
 						.TokenizeHTMLDocument(pageContents);
 				htmlContentMap.put(XMLConstants.XML_ATTR_ID, ""+id);
