@@ -22,14 +22,12 @@ public class ChromeBookmarksParser
 				if (name.equals("url")) {
 					String url = reader.nextString();
 					urls.add(url);
-				} else {
-					reader.skipValue();
 				}
 			} else if (nextToken == JsonToken.BEGIN_OBJECT) {
 				reader.beginObject();
 				recur_parse(reader);
 				reader.endObject();
-			} else if (nextToken == JsonToken.END_ARRAY) {
+			} else if (nextToken == JsonToken.BEGIN_ARRAY) {
 				reader.beginArray();
 				recur_parse(reader);
 				reader.endArray();
