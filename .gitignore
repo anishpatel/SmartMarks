@@ -1,6 +1,24 @@
 #################
+<<<<<<< HEAD
 ## Eclipse
 #################
+=======
+## Java
+#################
+# from http://github.com/github/gitignore
+
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#################
+## Eclipse
+#################
+# defaults
+>>>>>>> master
 
 *.pydevproject
 .project
@@ -28,6 +46,7 @@ local.properties
 # PDT-specific
 .buildpath
 
+<<<<<<< HEAD
 
 #################
 ## Visual Studio
@@ -161,3 +180,9 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+=======
+#################
+## Other
+#################
+
+>>>>>>> master
