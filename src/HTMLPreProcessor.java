@@ -120,14 +120,16 @@ public class HTMLPreProcessor {
 			htmlBody = htmlBody.replace(HTMLConstants.HTML_BODY_END, "");
 		}
 
+		// remove all HTML tags
+		htmlBody = htmlBody.replaceAll("&lt;.+?&gt;", " ");
+		
 		// remove all non alpha characters from title and body
 		htmlTitle = htmlTitle.replaceAll("[^A-Za-z\\s]", " ");
-		htmlBody = htmlBody.replaceAll("[^A-Za-z\\s]", " ");
+//		htmlBody = htmlBody.replaceAll("[^A-Za-z\\s]", " ");
 		
 		// remove any tokens with no more than 2 characters
 //		htmlBody = htmlBody.replaceAll("[A-Za-z]{1,2}", "");
 		htmlBody = htmlBody.replaceAll("\\b[\\w']{1,2}\\b", "");
-		System.out.println("length1=" + htmlBody.length());
 		
 		// replace multiple adjacent spaces with a single space
 		htmlTitle = htmlTitle.replaceAll("\\s{2,}", " ").trim();

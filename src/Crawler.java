@@ -11,8 +11,8 @@ public class Crawler {
 		List<String> urlList = new ArrayList<String>();
 		Map<Integer,String> urlMap = new HashMap<Integer,String>();
 		
-		urlList.add("https://www.google.com/");
-		urlList.add("http://www.yahoo.com/");
+		urlList.add("http://sports.yahoo.com/blogs/nfl-shutdown-corner/shamarko-thomas-falls-down-end-40-runs-unofficial-174454297--nfl.html");
+		urlList.add("http://www.amazon.com/Fundamentals-Predictive-Mining-Computer-Science/dp/1447125657/");
 		for (int i = 0; i < urlList.size(); ++i) {
 			bookmarkIdList.add(i);
 			urlMap.put(i, urlList.get(i));
