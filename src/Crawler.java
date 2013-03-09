@@ -6,88 +6,17 @@ import java.util.regex.*;
 public class Crawler {
 	public Set<String> weblinkList;
 
-	public static void main(String[] args) {
-		List<Integer> bookmarkIdList = new ArrayList<Integer>();
-		List<String> urlList = new ArrayList<String>();
-		Map<Integer,String> urlMap = new HashMap<Integer,String>();
-		
-		urlList.add("http://sports.yahoo.com/blogs/nfl-shutdown-corner/shamarko-thomas-falls-down-end-40-runs-unofficial-174454297--nfl.html");
-		urlList.add("http://www.amazon.com/Fundamentals-Predictive-Mining-Computer-Science/dp/1447125657/");
-		for (int i = 0; i < urlList.size(); ++i) {
-			bookmarkIdList.add(i);
-			urlMap.put(i, urlList.get(i));
+/*		System.out.println("weblinkList:" + crawler.weblinkList.size());
+		Object arr[] = crawler.weblinkList.toArray();
+	
+		for (int i = 0; i < crawler.weblinkList.size(); i++) {
+			System.out.println("weblinkList (" + i + "):" + arr[i]);
 		}
-		
-		Map<Integer, Map<String, String>> bookmarkResultMap = CrawlBookmarks(bookmarkIdList, urlMap);
-		WriteXMLFile.WriteHTMLDocumentToXML(bookmarkResultMap, bookmarkIdList);
-	}
+	
+		System.out.println("pageContents:" + pageContents);*/
 
-	public static Map<Integer, Map<String, String>> CrawlBookmarks(
-			List<Integer> bookmarkIdList, Map<Integer,String> urlMap) {
-		Map<Integer, Map<String, String>> bookmarkResultMap = new HashMap<Integer, Map<String, String>>();
-		for (Integer id : bookmarkIdList) {
 
-			try {
-
-				String pageURL = urlMap.get(id);
-				Crawler crawler = new Crawler();
-				String pageContents = crawler.Crawl(pageURL);
-				pageContents = pageContents == null ? "" : pageContents;
-
-/*				System.out.println("weblinkList:" + crawler.weblinkList.size());
-				Object arr[] = crawler.weblinkList.toArray();
-
-				for (int i = 0; i < crawler.weblinkList.size(); i++) {
-					System.out.println("weblinkList (" + i + "):" + arr[i]);
-				}
-
-				System.out.println("pageContents:" + pageContents);*/
-				Map<String, String> htmlContentMap = HTMLPreProcessor
-						.TokenizeHTMLDocument(pageContents);
-				htmlContentMap.put(XMLConstants.XML_ATTR_ID, ""+id);
-				bookmarkResultMap.put(id, htmlContentMap);
-
-				String htmlBody = htmlContentMap
-						.remove(HTMLConstants.HTML_BODY);
-/*				System.out.println("Title:"
-						+ htmlContentMap.get(HTMLConstants.HTML_TITLE));
-				System.out.println("Body:" + htmlBody);*/
-				String pageContentsWithoutScripts = HTMLPreProcessor
-						.RemoveScriptFromHTML(htmlBody);
-				String pageContentsWithoutHTMLelements = HTMLPreProcessor
-						.ReplaceHTMLElementsWithText(pageContentsWithoutScripts);
-				String pageContentsWithoutHyperlink = HTMLPreProcessor
-						.RemoveHyperlinksFromHTML(
-								pageContentsWithoutHTMLelements, pageURL);
-				htmlContentMap.put(HTMLConstants.HTML_BODY,
-						pageContentsWithoutHyperlink);
-
-/*				System.out.println("pageContentsWithoutScripts:"
-						+ pageContentsWithoutScripts);
-				System.out.println("pageContentsWithoutHTMLelements:"
-						+ pageContentsWithoutHTMLelements);
-				System.out
-						.println("Plain Text:" + pageContentsWithoutHyperlink);
-
-				System.out.println("\n\nContent Type\tContent Length");
-				System.out.println("Raw:\t\t" + pageContents.length());
-				System.out.println("Body:\t\t" + htmlBody.length());
-				System.out.println("Without Script:\t"
-						+ pageContentsWithoutScripts.length());
-				System.out.println("Without HTML:\t"
-						+ pageContentsWithoutHTMLelements.length());
-				System.out.println("Plain Text:\t"
-						+ pageContentsWithoutHyperlink.length());*/
-
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return bookmarkResultMap;
-	}
-
-	public String Crawl(String startUrl) {
+	public String crawl(String startUrl) {
 
 		String pageContents = "";
 		// Set up crawl lists.
@@ -127,31 +56,30 @@ public class Crawler {
 					pageUrl.openStream()));
 			// Read page into buffer.
 			String line;
-			StringBuffer pageBuffer = new StringBuffer();
+			StringBuilder pageBuffer = new StringBuilder();
 			while ((line = reader.readLine()) != null) {
 				pageBuffer.append("\n" + line);
 			}
 			return pageBuffer.toString();
 		} catch (Exception e) {
+			return null;
 		}
-		return null;
 	}
 
 	private static URL verifyUrl(String url) {
 		if (!url.toLowerCase().startsWith("http://")) {
 			return null;
 		}
-		URL verifiedUrl = null;
 		try {
-			verifiedUrl = new URL(url);
+			return new URL(url);
 		} catch (Exception e) {
 			return null;
 		}
-		return verifiedUrl;
 	}
 
 	private static List<String> retrieveLinks(URL pageUrl, String pageContents,
-			Set<String> crawledList) {
+			Set<String> crawledList)
+	{
 		// System.out.println("Inside Retrieve Links");
 		Pattern p = Pattern.compile("<a\\s+href\\s*=\\s*\"?(.*?)[\"|>]",
 				Pattern.CASE_INSENSITIVE);
@@ -223,5 +151,24 @@ public class Crawler {
 			return url.substring(0, index + 3) + url.substring(index + 7);
 		}
 		return (url);
+	}
+	
+	public static void main(String[] args) {
+		List<String> urlList = new ArrayList<String>();
+		urlList.add("http://sports.yahoo.com/blogs/nfl-shutdown-corner/shamarko-thomas-falls-down-end-40-runs-unofficial-174454297--nfl.html");
+		urlList.add("http://www.amazon.com/Fundamentals-Predictive-Mining-Computer-Science/dp/1447125657/");
+		
+		Crawler crawler = new Crawler();
+		Map<String,String> webpages = new HashMap<String,String>();
+		for (String url : urlList) {
+			String pageContent = crawler.crawl(url);
+			pageContent = pageContent == null ? "" : pageContent;
+			webpages.put(url, pageContent);
+		}
+		
+		for (String url : webpages.keySet()) {
+			System.out.println(url);
+			System.out.println(webpages.get(url));
+		}
 	}
 }

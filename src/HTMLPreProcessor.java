@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class HTMLPreProcessor {
 
-	public static String ReplaceHTMLElementsWithText(String content) {
+	public static String replaceHTMLElementsWithText(String content) {
 		content = content.replaceAll("\n", "");
 		content = content.replaceAll("&nbsp;", "");
 		content = content.replaceAll("&amp;", "&");
@@ -29,7 +29,7 @@ public class HTMLPreProcessor {
 		return content;
 	}
 
-	public static String RemoveScriptFromHTML(String content) {
+	public static String removeScriptFromHTML(String content) {
 		String contentWithoutScripts = content.replaceAll("\n", "");
 		Matcher matcher = HTMLConstants.HTML_SCRIPT_REGEX.matcher(content);
 		List<String> scriptList = new ArrayList<String> ();
@@ -47,7 +47,7 @@ public class HTMLPreProcessor {
 		return contentWithoutScripts;
 	}
 
-	public static String RemoveHyperlinksFromHTML(String content, String strPageURL) throws MalformedURLException
+	public static String removeHyperlinksFromHTML(String content, String strPageURL) throws MalformedURLException
 	{
 		URL pageURL = new URL(strPageURL);
 		String contentWithoutHyperlinks = content;
@@ -102,7 +102,8 @@ public class HTMLPreProcessor {
 		  }
 		return contentWithoutHyperlinks;
 	}
-	public static Map<String, String> TokenizeHTMLDocument(String content) {
+	public static Map<String, String> splitHTMLDocument(String content)
+	{
 		content = content.replaceAll("\n", "");
 		String htmlTitle = "", htmlBody = "";
 
@@ -120,7 +121,7 @@ public class HTMLPreProcessor {
 			htmlBody = htmlBody.replace(HTMLConstants.HTML_BODY_END, "");
 		}
 
-		// remove all HTML tags
+/*		// remove all HTML tags
 		htmlBody = htmlBody.replaceAll("&lt;.+?&gt;", " ");
 		
 		// remove all non alpha characters from title and body
@@ -151,13 +152,13 @@ public class HTMLPreProcessor {
 		// tokenize body
 		List<String> htmlBodyTokens = new LinkedList<String>(Arrays.asList(htmlBody.split(" ")));
 		System.out.println(htmlBodyTokens.size());
-/*		Iterator<String> htmlBodyTokensIter = htmlBodyTokens.iterator();
+		Iterator<String> htmlBodyTokensIter = htmlBodyTokens.iterator();
 		while (htmlBodyTokensIter.hasNext()) {
 			String token = htmlBodyTokensIter.next();
 			if (stopwords.contains(token)) {
 				htmlBodyTokensIter.remove();
 			}
-		}*/
+		}
 		for (int i = 0; i < htmlBodyTokens.size(); ++i) {
 			String token = htmlBodyTokens.get(i);
 			if (stopwords.contains(token)) {
@@ -172,7 +173,7 @@ public class HTMLPreProcessor {
 	        sb.append(sep).append(token);
 	    }
 	    htmlBody = sb.toString();
-	    System.out.println("length2=" + htmlBody.length());
+	    System.out.println("length2=" + htmlBody.length());*/
 		
 		htmlContentMap.put(HTMLConstants.HTML_TITLE, htmlTitle);
 		htmlContentMap.put(HTMLConstants.HTML_BODY, htmlBody);

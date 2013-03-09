@@ -8,11 +8,9 @@ import java.util.List;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
-public class ChromeBookmarksParser
-{
-	private final List<String> urls = new ArrayList<String>();
-	
-	private void recur_parse(JsonReader reader) throws IOException
+public class ChromeBookmarksIO
+{	
+	private static void recur_read(JsonReader reader, List<Bookmark> bookmarks) throws IOException
 	{
 		while (reader.hasNext()) {
 			JsonToken nextToken = reader.peek();
@@ -20,15 +18,15 @@ public class ChromeBookmarksParser
 				String name = reader.nextName();
 				if (name.equals("url")) {
 					String url = reader.nextString();
-					urls.add(url);
+					bookmarks.add(new Bookmark(url));
 				}
 			} else if (nextToken == JsonToken.BEGIN_OBJECT) {
 				reader.beginObject();
-				recur_parse(reader);
+				recur_read(reader, bookmarks);
 				reader.endObject();
 			} else if (nextToken == JsonToken.BEGIN_ARRAY) {
 				reader.beginArray();
-				recur_parse(reader);
+				recur_read(reader, bookmarks);
 				reader.endArray();
 			} else {
 				reader.skipValue();
@@ -36,14 +34,16 @@ public class ChromeBookmarksParser
 		}
 	}
 	
-	public void parse(String filePath)
+	public static List<Bookmark> read(String filePath)
 	{
+		List<Bookmark> bookmarks = new ArrayList<Bookmark>(); 
 		JsonReader reader = null;
 		 try {
 			reader = new JsonReader(new FileReader(filePath));
 			reader.beginObject();
-			recur_parse(reader);
+			recur_read(reader, bookmarks);
 			reader.endObject();
+			return bookmarks;
 		} catch (FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
 		} catch (IOException ioe) {
@@ -57,21 +57,20 @@ public class ChromeBookmarksParser
 				}
 			}
 		}
+		return null;
 	}
 	
-	public List<String> getUrls()
+	public static void append(String filePath, List<Bookmark> bookmarks)
 	{
-		return Collections.unmodifiableList(urls);
+		throw new UnsupportedOperationException("TODO");
 	}
 	
 	public static void main(String[] args)
 	{
-		ChromeBookmarksParser cbp = new ChromeBookmarksParser();
-		cbp.parse("Bookmarks");
-		List<String> urls = cbp.getUrls();
-		for (String url : urls) {
-			System.out.println(url);
+		List<Bookmark> bookmarks = ChromeBookmarksIO.read("Bookmarks");
+		for (Bookmark bookmark : bookmarks) {
+			System.out.println(bookmark.url);
 		}
-		System.out.println(urls.size());
+		System.out.println(bookmarks.size());
 	}
 }

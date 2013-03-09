@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		/* get path of Bookmarks JSON file */
+		// get path of Bookmarks JSON file 
 		String bookmarksFilePath;
 		if (args.length == 1) {
 			bookmarksFilePath = args[0];
@@ -34,21 +35,33 @@ public class Main
 			throw new IllegalArgumentException("Too many arguments passed.");
 		}
 		
-		/* get urls from Bookmarks */
-		ChromeBookmarksParser cbp = new ChromeBookmarksParser();
-		cbp.parse(bookmarksFilePath);
-		List<String> urlList = cbp.getUrls();
+		// get bookmarks metadata (e.g., url)
+		List<Bookmark> bookmarks = ChromeBookmarksIO.read(bookmarksFilePath);
 		
-		
-		Map<Integer,String> urlMap = new HashMap<Integer,String>();
-		List<Integer> bookmarkIdList = new ArrayList<Integer>(urlList.size());
-		for (int i = 0; i < urlList.size(); ++i) {
-			bookmarkIdList.add(i);
-			urlMap.put(i, urlList.get(i));
+		// crawl bookmarks for webpage content (ie, HTML)
+		Crawler crawler = new Crawler();
+		for (Bookmark bookmark : bookmarks) {
+			bookmark.rawPage = crawler.crawl(bookmark.url);
+			bookmark.rawPage = bookmark.rawPage == null ? "" : bookmark.rawPage;
 		}
 		
-		/* crawl bookmarks and write pages to XML files */
-		Map<Integer, Map<String, String>> bookmarkResultMap = Crawler.CrawlBookmarks(bookmarkIdList, urlMap);
-		WriteXMLFile.WriteHTMLDocumentToXML(bookmarkResultMap, bookmarkIdList);
+		// remove HTML markup and other code
+		for (Bookmark bookmark : bookmarks) {
+			Map<String, String> htmlContentMap = HTMLPreProcessor.splitHTMLDocument(bookmark.rawPage);
+			bookmark.title = htmlContentMap.get(HTMLConstants.HTML_TITLE);
+			bookmark.rawBody = htmlContentMap.get(HTMLConstants.HTML_BODY);
+			bookmark.bodyText = bookmark.rawBody;
+			bookmark.bodyText = HTMLPreProcessor.removeScriptFromHTML(bookmark.bodyText);
+			bookmark.bodyText = HTMLPreProcessor.replaceHTMLElementsWithText(bookmark.bodyText);
+			bookmark.bodyText = HTMLPreProcessor.removeHyperlinksFromHTML(bookmark.bodyText, bookmark.url);
+		}
+		
+		// create XML corpus of bookmarks
+		XMLFileIO.write(bookmarks);
+		
+		// run TMSK/RIKTEXT
+		
+		// grab classifications and reconstruct Bookmarks file
+//		ChromeBookmarksIO.write(bookmarksFilePath, bookmarks);
 	}
 }
