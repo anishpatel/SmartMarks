@@ -2,8 +2,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -13,32 +11,28 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		// get path of Bookmarks JSON file 
-		String bookmarksFilePath;
-		if (args.length == 1) {
-			bookmarksFilePath = args[0];
-		} else if (args.length == 0) {
-			Properties bookmarksLoc = new Properties();
-			try {
-				bookmarksLoc.load(new FileInputStream("data/in/bookmarks-location.properites"));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(1);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(1);
-			}
-			bookmarksFilePath = bookmarksLoc.getProperty("path");
-		} else {
-			throw new IllegalArgumentException("Too many arguments passed.");
+		String corpusPath = "data/out/ChromeBookmarks.xml";
+		
+		// get input paths
+		Properties paths = new Properties();
+		try {
+			paths.load(new FileInputStream("paths.properties"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
 		}
 		
 		// get bookmarks metadata (e.g., url)
+		String bookmarksFilePath = paths.getProperty("bookmarks");
+		bookmarksFilePath = bookmarksFilePath.replace("%username%", System.getProperty("user.name"));
 		List<Bookmark> bookmarks = ChromeBookmarksIO.read(bookmarksFilePath);
-		
-		// crawl bookmarks for webpage content (ie, HTML)
+		 
+/*		// crawl bookmarks for webpage content (ie, HTML)
 		Crawler crawler = new Crawler();
 		for (Bookmark bookmark : bookmarks) {
 			bookmark.rawPage = crawler.crawl(bookmark.url);
@@ -53,15 +47,23 @@ public class Main
 			bookmark.bodyText = bookmark.rawBody;
 			bookmark.bodyText = HTMLPreProcessor.removeScriptFromHTML(bookmark.bodyText);
 			bookmark.bodyText = HTMLPreProcessor.replaceHTMLElementsWithText(bookmark.bodyText);
-			bookmark.bodyText = HTMLPreProcessor.removeHyperlinksFromHTML(bookmark.bodyText, bookmark.url);
+			try {
+				bookmark.bodyText = HTMLPreProcessor.removeHyperlinksFromHTML(bookmark.bodyText, bookmark.url);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
 		}
 		
 		// create XML corpus of bookmarks
-		XMLFileIO.write(bookmarks);
+		XMLFileIO.write(bookmarks, corpusPath);
 		
 		// run TMSK/RIKTEXT
+		String tmPropsPath = paths.getProperty("tmsk_properties");
+		TextMiner tm = new TextMiner(corpusPath, tmPropsPath);
 		
 		// grab classifications and reconstruct Bookmarks file
 //		ChromeBookmarksIO.write(bookmarksFilePath, bookmarks);
-	}
+*/	}
 }

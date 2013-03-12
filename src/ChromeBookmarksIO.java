@@ -1,8 +1,8 @@
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.stream.JsonReader;
@@ -39,7 +39,7 @@ public class ChromeBookmarksIO
 		List<Bookmark> bookmarks = new ArrayList<Bookmark>(); 
 		JsonReader reader = null;
 		 try {
-			reader = new JsonReader(new FileReader(filePath));
+			reader = new JsonReader(new BufferedReader(new FileReader(filePath)));
 			reader.beginObject();
 			recur_read(reader, bookmarks);
 			reader.endObject();
