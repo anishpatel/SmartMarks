@@ -32,7 +32,7 @@ public class Main
 		bookmarksFilePath = bookmarksFilePath.replace("%username%", System.getProperty("user.name"));
 		List<Bookmark> bookmarks = ChromeBookmarksIO.read(bookmarksFilePath);
 		 
-/*		// crawl bookmarks for webpage content (ie, HTML)
+		// crawl bookmarks for webpage content (ie, HTML)
 		Crawler crawler = new Crawler();
 		for (Bookmark bookmark : bookmarks) {
 			bookmark.rawPage = crawler.crawl(bookmark.url);
@@ -65,5 +65,5 @@ public class Main
 		
 		// grab classifications and reconstruct Bookmarks file
 //		ChromeBookmarksIO.write(bookmarksFilePath, bookmarks);
-*/	}
+	}
 }
