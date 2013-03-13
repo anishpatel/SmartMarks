@@ -48,12 +48,13 @@ public class Main
 		
 		// TEMP calculate tfidf for each term for each bookmark
 		TextMinerFuncs.calcTfidfs(bookmarks);
-		Bookmark bookmark = bookmarks.get(0);
-		System.out.println(bookmark.url);
-		for (TokenValue tv : bookmark.sortedTfidf) {
-//			if (tv.value.intValue() >= 1) {
-				System.out.println(tv.token+"\t"+tv.value);//+"\t"+bookmark.tf.get(tv.token));
-//			}
+		for (Bookmark bookmark : bookmarks) {
+			System.out.println(bookmark.url);
+			for (TokenValue tv : bookmark.sortedTfidf) {
+//				if (tv.value.intValue() >= 1) {
+					System.out.println(tv.token+"\t"+tv.value+"\t"+bookmark.tf.get(tv.token));
+//				}
+			}
 		}
 		
 /*		// run TMSK/RIKTEXT

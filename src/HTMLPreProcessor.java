@@ -24,7 +24,7 @@ public class HTMLPreProcessor
 		text = text.replaceAll("<style.*?>.*?</style>", " ");
 		text = text.replaceAll("<.+?>", " ");
 		text = text.replaceAll("&.+?;", " ");
-		text = text.replaceAll("[^a-zA-Z_\\s']", " ");
+		text = text.replaceAll("[^a-zA-Z_\\s'$]", " ");
 		text = replaceWhiteSpaceWithSpace(text);
 		return text;
 	}
