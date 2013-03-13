@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.Map;
+
 
 public class Bookmark
 {
@@ -12,6 +15,12 @@ public class Bookmark
 	public String rawPage = null;
 	public String title = null;
 	public String body = null;
+	
+	public Map<String,Integer> tf = null;
+	public Map<String,Double> tfidf = null;
+	
+	public List<TokenValue> sortedTf = null;
+	public List<TokenValue> sortedTfidf = null;
 	
 	public Bookmark(String url)
 	{

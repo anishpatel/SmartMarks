@@ -46,11 +46,21 @@ public class Main
 		// create XML corpus of bookmarks
 		XMLFileIO.write(bookmarks, corpusPath);
 		
-		// run TMSK/RIKTEXT
-		String tmPropsPath = paths.getProperty("tmsk_properties");
-		TextMiner tm = new TextMiner(corpusPath, tmPropsPath);
+		// TEMP calculate tfidf for each term for each bookmark
+		TextMinerFuncs.calcTfidfs(bookmarks);
+		Bookmark bookmark = bookmarks.get(0);
+		System.out.println(bookmark.url);
+		for (TokenValue tv : bookmark.sortedTfidf) {
+//			if (tv.value.intValue() >= 1) {
+				System.out.println(tv.token+"\t"+tv.value);//+"\t"+bookmark.tf.get(tv.token));
+//			}
+		}
 		
-		// grab classifications and reconstruct Bookmarks file
-//		ChromeBookmarksIO.write(bookmarksFilePath, bookmarks);
+/*		// run TMSK/RIKTEXT
+		String tmPropsPath = paths.getProperty("tmsk_properties");
+		TextMiner tm = new TextMiner(corpusPath, tmPropsPath);*/
+		
+/*		// grab classifications and reconstruct Bookmarks file
+		ChromeBookmarksIO.write(bookmarksFilePath, bookmarks);*/
 	}
 }

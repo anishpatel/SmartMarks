@@ -23,6 +23,7 @@ public class TextMinerFuncs
 		for (Bookmark bookmark : bookmarks) {
 			Map<String,Integer> tf = new HashMap<String,Integer>(); 
 			for (String token : bookmark.body.split(" ")) {
+				token = token.toLowerCase();
 				if (tf.containsKey(token)) {
 					tf.put(token, tf.get(token)+1);
 				} else {
@@ -46,6 +47,7 @@ public class TextMinerFuncs
 		for (Bookmark bookmark : bookmarks) {
 			Map<String,Integer> tf = new HashMap<String,Integer>(); 
 			for (String token : bookmark.body.split(" ")) {
+				token = token.toLowerCase();
 				if (tf.containsKey(token)) {
 					tf.put(token, tf.get(token)+1);
 				} else {
@@ -62,7 +64,7 @@ public class TextMinerFuncs
 			for (String token : tf.keySet()) {
 				sortedTf.add(new TokenValue(token, tf.get(token)));
 			}
-			Collections.sort(sortedTf);
+			Collections.sort(sortedTf, Collections.reverseOrder());
 			bookmark.sortedTf = sortedTf;
 		}
 		
@@ -70,7 +72,7 @@ public class TextMinerFuncs
 		for (Bookmark bookmark : bookmarks) {
 			Map<String,Double> tfidf = new HashMap<String,Double>();
 			for (String token : bookmark.tf.keySet()) {
-				double idf = Math.log( bookmarks.size() / df.get(token) );
+				double idf = Math.log( 1.0 * bookmarks.size() / df.get(token) );
 				tfidf.put(token, bookmark.tf.get(token) * idf);
 			}
 			bookmark.tfidf = tfidf;
@@ -78,7 +80,7 @@ public class TextMinerFuncs
 			for (String token : tfidf.keySet()) {
 				sortedTfidf.add(new TokenValue(token, tfidf.get(token)));
 			}
-			Collections.sort(sortedTfidf);
+			Collections.sort(sortedTfidf, Collections.reverseOrder());
 			bookmark.sortedTfidf = sortedTfidf;
 		}
 	}
