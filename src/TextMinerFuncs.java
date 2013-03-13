@@ -3,85 +3,97 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 
 public class TextMinerFuncs
 {
-/*	public static Set<String> getDict(List<Bookmark> bookmarks)
+	public static List<String> getDict(List<Bookmark> bookmarks)
 	{
-		Set<String> dict = new HashSet<String>();
+		SortedSet<String> dict = new TreeSet<String>();
 		for (Bookmark bookmark : bookmarks) {
-			for (String token : bookmark.body.split(" ")) {
-				dict.add(token);
-			}
+			dict.addAll(bookmark.tokens);
 		}
-		return dict;
-	}*/
+		return ImmutableList.copyOf(dict);
+	}
+	
+	public static Map<String,Integer> getTokenLookupTable(List<String> dict)
+	{
+		Map<String,Integer> tokenLookup = new HashMap<String,Integer>(dict.size());
+		for (int i = 0; i < dict.size(); ++i) {
+			tokenLookup.put(dict.get(i), i);
+		}
+		return ImmutableMap.copyOf(tokenLookup);
+	}
 	
 	public static void calcTfs(List<Bookmark> bookmarks)
 	{
 		for (Bookmark bookmark : bookmarks) {
-			Map<String,Integer> tf = new HashMap<String,Integer>(); 
-			for (String token : bookmark.body.split(" ")) {
-				token = token.toLowerCase();
-				if (tf.containsKey(token)) {
-					tf.put(token, tf.get(token)+1);
+			Map<Integer,Integer> tf = new HashMap<Integer,Integer>(); 
+			for (int tokenId : bookmark.bodyCompressed) {
+				if (tf.containsKey(tokenId)) {
+					tf.put(tokenId, tf.get(tokenId)+1);
 				} else {
-					tf.put(token, 1);
+					tf.put(tokenId, 1);
 				}
 			}
-			bookmark.tf = tf;
+			bookmark.tf = ImmutableMap.copyOf(tf);
 			List<TokenValue> sortedTf = new ArrayList<TokenValue>(tf.size());
-			for (String token : tf.keySet()) {
-				sortedTf.add(new TokenValue(token, tf.get(token)));
+			for (int tokenId : tf.keySet()) {
+				sortedTf.add(new TokenValue(tokenId, tf.get(tokenId)));
 			}
 			Collections.sort(sortedTf);
-			bookmark.sortedTf = sortedTf;
+			bookmark.sortedTf = ImmutableList.copyOf(sortedTf);
 		}
 	}
 	
-	public static void calcTfidfs(List<Bookmark> bookmarks)
+	public static Map<Integer,Integer> calcTfidfs(List<Bookmark> bookmarks)
 	{
 		// create df for all docs and tf for each doc
-		Map<String,Integer> df = new HashMap<String,Integer>();
+		Map<Integer,Integer> df = new HashMap<Integer,Integer>();
 		for (Bookmark bookmark : bookmarks) {
-			Map<String,Integer> tf = new HashMap<String,Integer>(); 
-			for (String token : bookmark.body.split(" ")) {
-				token = token.toLowerCase();
-				if (tf.containsKey(token)) {
-					tf.put(token, tf.get(token)+1);
+			Map<Integer,Integer> tf = new HashMap<Integer,Integer>(); 
+			for (int tokenId : bookmark.bodyCompressed) {
+				if (tf.containsKey(tokenId)) {
+					tf.put(tokenId, tf.get(tokenId)+1);
 				} else {
-					tf.put(token, 1);
-					if (df.containsKey(token)) {
-						df.put(token, df.get(token)+1);
+					tf.put(tokenId, 1);
+					if (df.containsKey(tokenId)) {
+						df.put(tokenId, df.get(tokenId)+1);
 					} else {
-						df.put(token, 1);
+						df.put(tokenId, 1);
 					}
 				}
 			}
-			bookmark.tf = tf;
+			bookmark.tf = ImmutableMap.copyOf(tf);
 			List<TokenValue> sortedTf = new ArrayList<TokenValue>(tf.size());
-			for (String token : tf.keySet()) {
-				sortedTf.add(new TokenValue(token, tf.get(token)));
+			for (int tokenId : tf.keySet()) {
+				sortedTf.add(new TokenValue(tokenId, tf.get(tokenId)));
 			}
 			Collections.sort(sortedTf, Collections.reverseOrder());
-			bookmark.sortedTf = sortedTf;
+			bookmark.sortedTf = ImmutableList.copyOf(sortedTf);
 		}
 		
 		// compute tfidf for each doc
 		for (Bookmark bookmark : bookmarks) {
-			Map<String,Double> tfidf = new HashMap<String,Double>();
-			for (String token : bookmark.tf.keySet()) {
-				double idf = Math.log( 1.0 * bookmarks.size() / df.get(token) );
-				tfidf.put(token, bookmark.tf.get(token) * idf);
+			Map<Integer,Double> tfidf = new HashMap<Integer,Double>(bookmark.tf.size());
+			for (int tokenId : bookmark.tf.keySet()) {
+				double idf = Math.log( 1.0 * bookmarks.size() / df.get(tokenId) );
+				tfidf.put(tokenId, bookmark.tf.get(tokenId) * idf);
 			}
-			bookmark.tfidf = tfidf;
+			bookmark.tfidf = ImmutableMap.copyOf(tfidf);
 			List<TokenValue> sortedTfidf = new ArrayList<TokenValue>(tfidf.size());
-			for (String token : tfidf.keySet()) {
-				sortedTfidf.add(new TokenValue(token, tfidf.get(token)));
+			for (int tokenId : tfidf.keySet()) {
+				sortedTfidf.add(new TokenValue(tokenId, tfidf.get(tokenId)));
 			}
 			Collections.sort(sortedTfidf, Collections.reverseOrder());
-			bookmark.sortedTfidf = sortedTfidf;
+			bookmark.sortedTfidf = ImmutableList.copyOf(sortedTfidf);
 		}
+		
+		return ImmutableMap.copyOf(df);
 	}
 }

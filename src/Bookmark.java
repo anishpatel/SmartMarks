@@ -1,5 +1,5 @@
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 
 public class Bookmark
@@ -16,11 +16,13 @@ public class Bookmark
 	public String title = null;
 	public String body = null;
 	
-	public Map<String,Integer> tf = null;
-	public Map<String,Double> tfidf = null;
+	public ImmutableList<String> tokens = null;	
+	public ImmutableList<Integer> bodyCompressed = null;
 	
-	public List<TokenValue> sortedTf = null;
-	public List<TokenValue> sortedTfidf = null;
+	public ImmutableMap<Integer,Integer> tf = null;
+	public ImmutableMap<Integer,Double> tfidf = null;
+	public ImmutableList<TokenValue> sortedTf = null;
+	public ImmutableList<TokenValue> sortedTfidf = null;
 	
 	public Bookmark(String url)
 	{
