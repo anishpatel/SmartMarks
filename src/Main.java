@@ -1,9 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 
@@ -41,19 +39,8 @@ public class Main
 		
 		// remove HTML markup and other code
 		for (Bookmark bookmark : bookmarks) {
-			Map<String, String> htmlContentMap = HTMLPreProcessor.splitHTMLDocument(bookmark.rawPage);
-			bookmark.title = htmlContentMap.get(HTMLConstants.HTML_TITLE);
-			bookmark.rawBody = htmlContentMap.get(HTMLConstants.HTML_BODY);
-			bookmark.bodyText = bookmark.rawBody;
-			bookmark.bodyText = HTMLPreProcessor.removeScriptFromHTML(bookmark.bodyText);
-			bookmark.bodyText = HTMLPreProcessor.replaceHTMLElementsWithText(bookmark.bodyText);
-			try {
-				bookmark.bodyText = HTMLPreProcessor.removeHyperlinksFromHTML(bookmark.bodyText, bookmark.url);
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(1);
-			}
+			bookmark.title = HTMLPreProcessor.getTitle(bookmark.rawPage);
+			bookmark.body = HTMLPreProcessor.getBody(bookmark.rawPage);
 		}
 		
 		// create XML corpus of bookmarks

@@ -47,6 +47,7 @@ public class XMLFileIO
 				// url element
 				Element url = doc.createElement(XML_TAG_URL);
 				url.appendChild(doc.createTextNode(bookmark.url));
+				bmElement.appendChild(url);
 				
 				// title element
 				Element title = doc.createElement(XML_TAG_TITLE);
@@ -55,7 +56,7 @@ public class XMLFileIO
 	
 				// body element
 				Element body = doc.createElement(XML_TAG_BODY);
-				body.appendChild(doc.createTextNode(bookmark.bodyText));
+				body.appendChild(doc.createTextNode(bookmark.body));
 				bmElement.appendChild(body);
 			}
 				

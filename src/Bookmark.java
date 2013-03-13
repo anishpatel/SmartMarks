@@ -11,8 +11,7 @@ public class Bookmark
 	
 	public String rawPage = null;
 	public String title = null;
-	public String rawBody = null;
-	public String bodyText = null;
+	public String body = null;
 	
 	public Bookmark(String url)
 	{
