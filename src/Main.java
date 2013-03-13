@@ -60,51 +60,11 @@ public class Main
 		XMLFileIO.write(bookmarks, corpusPath);
 		
 		// tokenize, stem, and stop
-		Scanner sc = null;
-		Map<String,String> stemTable = new HashMap<String,String>();
-		File stemsFile = new File(paths.getProperty("stems"));
-		try {
-			sc = new Scanner(stemsFile);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
-		while (sc.hasNext()) {
-			String root = sc.next().trim();
-			String token = sc.next().trim();
-			stemTable.put(token, root);
-		}
-		Set<String> stopwords = new HashSet<String>();
-		File stopwordsFile = new File(paths.getProperty("stopwords"));
-		try {
-			sc = new Scanner(stopwordsFile);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
-		while (sc.hasNext()) {
-			stopwords.add(sc.next().trim());
-		}
-		for (Bookmark bookmark : bookmarks) {
-			List<String> tokens = Arrays.asList(bookmark.body.toLowerCase().split(" "));
-			for (int i = 0; i < tokens.size(); ++i) {
-				String token = tokens.get(i);
-				if (stemTable.containsKey(token)) {
-					tokens.set(i, stemTable.get(token));
-				}
-			}
-			tokens = new LinkedList<String>(tokens);
-			Iterator<String> tokensIter = tokens.iterator();
-			while (tokensIter.hasNext()) {
-				String token = tokensIter.next();
-				if (stopwords.contains(token)) {
-					tokensIter.remove();
-				}
-			}
-			bookmark.tokens = ImmutableList.copyOf(tokens);
-		}
+		TextMinerFuncs.tokenize(bookmarks);
+		String stemwordsFilePath = paths.getProperty("stemwords");
+		TextMinerFuncs.stem(bookmarks, stemwordsFilePath);
+		String stopwordsFilePath = paths.getProperty("stopwords");
+		TextMinerFuncs.stop(bookmarks, stopwordsFilePath);
 		
 		// create dictionary, create reverse lookup table, and compress each bookmark's body using lookup table
 		List<String> dict = TextMinerFuncs.getDict(bookmarks);
@@ -118,12 +78,12 @@ public class Main
 			bookmark.bodyCompressed = ImmutableList.copyOf(bodyCompressed);
 		}
 		
-		// calculate tfidf for each term for each bookmark
+		// calculate tf*idf for each term for each bookmark
 		Map<Integer,Integer> df = TextMinerFuncs.calcTfidfs(bookmarks);
 		for (Bookmark bookmark : bookmarks) {
 			System.out.println(bookmark.url);
 			for (TokenValue tv : bookmark.sortedTfidf) {
-//				if (tv.value.intValue() >= 1) {
+//				if (tv.value.doubleValue > 0.0) {
 					String token = dict.get(tv.tokenId);
 					System.out.printf("%20s\t%5.02f\t%3d%n", token, tv.value, bookmark.tf.get(tv.tokenId));
 //				}

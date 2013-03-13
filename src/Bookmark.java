@@ -1,3 +1,5 @@
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -16,7 +18,7 @@ public class Bookmark
 	public String title = null;
 	public String body = null;
 	
-	public ImmutableList<String> tokens = null;	
+	public List<String> tokens = null;	
 	public ImmutableList<Integer> bodyCompressed = null;
 	
 	public ImmutableMap<Integer,Integer> tf = null;
