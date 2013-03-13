@@ -44,10 +44,9 @@ public class TextMinerFuncs
 	{
 		// get stem table from file
 		Map<String,String> stemTable = new HashMap<String,String>();
-		File stemsFile = new File(stemwordsFilePath);
 		Scanner sc = null;
 		try {
-			sc = new Scanner(stemsFile);
+			sc = new Scanner(new File(stemwordsFilePath));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -88,6 +87,7 @@ public class TextMinerFuncs
 			stopwords.add(sc.next().trim());
 		}
 		for (Bookmark bookmark : bookmarks) {
+			bookmark.tokens = new LinkedList<String>(bookmark.tokens);
 			Iterator<String> tokensIter = bookmark.tokens.iterator();
 			while (tokensIter.hasNext()) {
 				String token = tokensIter.next();
