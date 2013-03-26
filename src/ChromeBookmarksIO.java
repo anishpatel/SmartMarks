@@ -1,63 +1,61 @@
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 
 public class ChromeBookmarksIO
 {	
-	private static void recur_read(JsonReader reader, List<Bookmark> bookmarks) throws IOException
+	public final static String TRAIN_URLS_FILENAME = "train-urls.csv";
+	public final static String TEST_URLS_FILENAME = "test-urls.csv";
+	
+	public static List<Bookmark> readTrainUrls()
 	{
-		while (reader.hasNext()) {
-			JsonToken nextToken = reader.peek();
-			if (nextToken == JsonToken.NAME) {
-				String name = reader.nextName();
-				if (name.equals("url")) {
-					String url = reader.nextString();
-					bookmarks.add(new Bookmark(url));
-				}
-			} else if (nextToken == JsonToken.BEGIN_OBJECT) {
-				reader.beginObject();
-				recur_read(reader, bookmarks);
-				reader.endObject();
-			} else if (nextToken == JsonToken.BEGIN_ARRAY) {
-				reader.beginArray();
-				recur_read(reader, bookmarks);
-				reader.endArray();
-			} else {
-				reader.skipValue();
+		List<Bookmark> bookmarks = new ArrayList<Bookmark>(); 
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new File(TRAIN_URLS_FILENAME));
+			while (sc.hasNext()) {
+				String[] urlLabelPair = sc.nextLine().trim().split(";");
+				String url = urlLabelPair[0];
+				String label = urlLabelPair[1];
+				bookmarks.add(new Bookmark(url, label));
+			}
+			return bookmarks;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+			return null;
+		} finally {
+			if (sc != null) {
+				sc.close();
 			}
 		}
 	}
 	
-	public static List<Bookmark> read(String filePath)
+	public static List<Bookmark> readTestUrls()
 	{
 		List<Bookmark> bookmarks = new ArrayList<Bookmark>(); 
-		JsonReader reader = null;
-		 try {
-			reader = new JsonReader(new BufferedReader(new FileReader(filePath)));
-			reader.beginObject();
-			recur_read(reader, bookmarks);
-			reader.endObject();
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new File(TEST_URLS_FILENAME));
+			while (sc.hasNext()) {
+				String url = sc.nextLine().trim();
+				bookmarks.add(new Bookmark(url));
+			}
 			return bookmarks;
-		} catch (FileNotFoundException fnfe) {
-			fnfe.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+			return null;
 		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
+			if (sc != null) {
+				sc.close();
 			}
 		}
-		return null;
 	}
 	
 	public static void append(String filePath, List<Bookmark> bookmarks)
@@ -67,10 +65,15 @@ public class ChromeBookmarksIO
 	
 	public static void main(String[] args)
 	{
-		List<Bookmark> bookmarks = ChromeBookmarksIO.read("Bookmarks");
-		for (Bookmark bookmark : bookmarks) {
+		List<Bookmark> trainBookmarks = ChromeBookmarksIO.readTrainUrls();
+		List<Bookmark> testBookmarks = ChromeBookmarksIO.readTestUrls();
+		System.out.printf("Training Bookmarks (size=%d)%n", trainBookmarks.size());
+		for (Bookmark bookmark : trainBookmarks) {
+			System.out.println(bookmark.label+",\t"+bookmark.url);
+		}
+		System.out.printf("Testing Bookmarks (size=%d)%n", testBookmarks.size());
+		for (Bookmark bookmark : testBookmarks) {
 			System.out.println(bookmark.url);
 		}
-		System.out.println(bookmarks.size());
 	}
 }

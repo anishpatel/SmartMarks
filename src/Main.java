@@ -32,7 +32,8 @@ public class Main
 		// get bookmarks metadata (e.g., url)
 		String bookmarksFilePath = paths.getProperty("bookmarks");
 		bookmarksFilePath = bookmarksFilePath.replace("%username%", System.getProperty("user.name"));
-		List<Bookmark> bookmarks = ChromeBookmarksIO.read(bookmarksFilePath);
+		List<Bookmark> bookmarks = ChromeBookmarksIO.readTrainUrls();
+		List<Bookmark> testBookmarks = ChromeBookmarksIO.readTrainUrls();
 		 
 		// crawl bookmarks for webpage content (ie, HTML)
 		Crawler crawler = new Crawler();

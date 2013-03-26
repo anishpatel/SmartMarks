@@ -4,6 +4,7 @@
 data/in/*
 data/out/*
 *.cmd
+*.csv
 
 #################
 ## Eclipse

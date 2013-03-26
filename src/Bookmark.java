@@ -11,6 +11,8 @@ public class Bookmark
 	public final int id;
 	public final String url;
 	
+	public String label;
+	
 	//public HashSet<String> userLabels = null;
 	//public HashSet<String> autoLabels = null;
 	
@@ -26,10 +28,19 @@ public class Bookmark
 	public ImmutableList<TokenValue> sortedTf = null;
 	public ImmutableList<TokenValue> sortedTfidf = null;
 	
+	public Bookmark(String url, String label)
+	{
+		lastIdUsed += 1;
+		this.id = lastIdUsed;
+		this.url = url;
+		this.label = label;
+	}
+	
 	public Bookmark(String url)
 	{
 		lastIdUsed += 1;
 		this.id = lastIdUsed;
 		this.url = url;
+		this.label = null;
 	}
 }
