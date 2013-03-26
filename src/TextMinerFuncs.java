@@ -40,7 +40,7 @@ public class TextMinerFuncs
 		return token;
 	}
 	
-	public static void stem(List<Bookmark> bookmarks, String stemwordsFilePath)
+/*	public static void stem(List<Bookmark> bookmarks, String stemwordsFilePath)
 	{
 		// get stem table from file
 		Map<String,String> stemTable = new HashMap<String,String>();
@@ -67,8 +67,16 @@ public class TextMinerFuncs
 			}
 		}
 		
-		// stem words using algorithm TODO
-		
+		// stem words using algorithm TODO		
+	}*/
+	
+	public static void stem(List<Bookmark> bookmarks, String stemwordsFilePath)
+	{
+		Class stemClass = Class.forName("org.tartarus.snowball.ext." + lang + "Stemmer");
+		SnowballProgram stemmer = (SnowballProgram) stemClass.newInstance();
+		stemmer.setCurrent("your_word");
+		stemmer.stem();
+		String your_stemmed_word = stemmer.getCurrent();
 	}
 	
 	public static void stop(List<Bookmark> bookmarks, String stopwordsFilePath)
