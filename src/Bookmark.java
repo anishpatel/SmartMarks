@@ -14,6 +14,8 @@ public class Bookmark
 	//public HashSet<String> userLabels = null;
 	//public HashSet<String> autoLabels = null;
 	
+	public String folder = null;
+	
 	public String rawPage = null;
 	public String title = null;
 	public String body = null;

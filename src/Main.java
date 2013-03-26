@@ -1,4 +1,4 @@
-import java.io.FileInputStream;
+/*import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,11 +82,12 @@ public class Main
 			}
 		}
 		
-/*		// run TMSK/RIKTEXT
+		// run TMSK/RIKTEXT
 		String tmPropsPath = paths.getProperty("tmsk_properties");
-		TextMiner tm = new TextMiner(corpusPath, tmPropsPath);*/
+		TextMiner tm = new TextMiner(corpusPath, tmPropsPath);
 		
-/*		// grab classifications and reconstruct Bookmarks file
-		ChromeBookmarksIO.write(bookmarksFilePath, bookmarks);*/
+		// grab classifications and reconstruct Bookmarks file
+		ChromeBookmarksIO.write(bookmarksFilePath, bookmarks);
 	}
 }
+*/
