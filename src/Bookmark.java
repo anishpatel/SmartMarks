@@ -8,13 +8,12 @@ public class Bookmark
 {
 	private static int lastIdUsed = 0;
 	
+	public final long date;
 	public final int id;
 	public final String url;
 	
-	//public HashSet<String> userLabels = null;
-	//public HashSet<String> autoLabels = null;
-	
-	public String folder = null;
+	public String label = null;
+	//public HashSet<String> labels = null;
 	
 	public String rawPage = null;
 	public String title = null;
@@ -28,10 +27,30 @@ public class Bookmark
 	public ImmutableList<TokenValue> sortedTf = null;
 	public ImmutableList<TokenValue> sortedTfidf = null;
 	
+	public Bookmark(long date, int id, String url, String label)
+	{
+		this.date = date;
+		this.id = id;
+		this.url = url;
+		this.label = label;
+	}
+	
+	public Bookmark(long date, int id, String url)
+	{
+		this(date, id, url, null);
+	}
+	
 	public Bookmark(String url)
 	{
-		lastIdUsed += 1;
-		this.id = lastIdUsed;
-		this.url = url;
+		this(-1, ++lastIdUsed, url, null);
+	}
+	
+	@Override
+	public String toString()
+	{
+		if (label != null)
+			return label + " " + url;
+		else
+			return url;
 	}
 }
