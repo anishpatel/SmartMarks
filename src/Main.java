@@ -1,7 +1,9 @@
-/*import java.io.FileInputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -29,39 +31,42 @@ public class Main
 			System.exit(1);
 		}
 		
-		// get bookmarks metadata (e.g., url)
+		// get bookmarks metadata from Chrome's Bookmarks JSON file
 		String bookmarksFilePath = paths.getProperty("bookmarks");
 		bookmarksFilePath = bookmarksFilePath.replace("%username%", System.getProperty("user.name"));
-		List<Bookmark> bookmarks = ChromeBookmarksIO.read(bookmarksFilePath);
+		ChromeBookmarksFile cbf = JsonFileIO.read(bookmarksFilePath, ChromeBookmarksFile.class);
+		ChromeBookmarksEditor cbe = new ChromeBookmarksEditor(cbf);
+		List<Bookmark> trainBookmarks = cbe.getTrainingBookmarks();
+		List<Bookmark> testBookmarks = cbe.getTestBookmarks();
 		 
 		// crawl bookmarks for webpage content (ie, HTML)
 		Crawler crawler = new Crawler();
-		for (Bookmark bookmark : bookmarks) {
+		for (Bookmark bookmark : trainBookmarks) {
 			bookmark.rawPage = crawler.crawl(bookmark.url);
 			bookmark.rawPage = bookmark.rawPage == null ? "" : bookmark.rawPage;
 		}
 		
 		// remove HTML markup and other code
-		for (Bookmark bookmark : bookmarks) {
+		for (Bookmark bookmark : trainBookmarks) {
 			bookmark.title = HTMLPreProcessor.getTitle(bookmark.rawPage);
 			bookmark.body = HTMLPreProcessor.getBody(bookmark.rawPage);
 			bookmark.body = bookmark.body.toLowerCase();
 		}
 		
-		// create XML corpus of bookmarks
-		XMLFileIO.write(bookmarks, corpusPath);
+		// create XML corpus of trainBookmarks
+		XMLFileIO.write(trainBookmarks, corpusPath);
 		
 		// tokenize, stem, and stop
-		TextMinerFuncs.tokenize(bookmarks);
+		TextMinerFuncs.tokenize(trainBookmarks);
 		String stemwordsFilePath = paths.getProperty("stemwords");
-		TextMinerFuncs.stem(bookmarks, stemwordsFilePath);
+		TextMinerFuncs.stem(trainBookmarks, stemwordsFilePath);
 		String stopwordsFilePath = paths.getProperty("stopwords");
-		TextMinerFuncs.stop(bookmarks, stopwordsFilePath);
+		TextMinerFuncs.stop(trainBookmarks, stopwordsFilePath);
 		
 		// create dictionary, create reverse lookup table, and compress each bookmark's body using lookup table
-		List<String> dict = TextMinerFuncs.getDict(bookmarks);
+		List<String> dict = TextMinerFuncs.getDict(trainBookmarks);
 		Map<String,Integer> tokenLookup = TextMinerFuncs.getTokenLookupTable(dict);
-		for (Bookmark bookmark : bookmarks) {
+		for (Bookmark bookmark : trainBookmarks) {
 			List<Integer> bodyCompressed = new ArrayList<Integer>(bookmark.tokens.size());
 			for (String token : bookmark.tokens) {
 				bodyCompressed.add(tokenLookup.get(token));
@@ -71,8 +76,8 @@ public class Main
 		}
 		
 		// calculate tf*idf for each term for each bookmark
-		Map<Integer,Integer> df = TextMinerFuncs.calcTfidfs(bookmarks);
-		for (Bookmark bookmark : bookmarks) {
+		Map<Integer,Integer> df = TextMinerFuncs.calcTfidfs(trainBookmarks);
+		for (Bookmark bookmark : trainBookmarks) {
 			System.out.println(bookmark.url);
 			for (TokenValue tv : bookmark.sortedTfidf) {
 //				if (tv.value.doubleValue > 0.0) {
@@ -82,12 +87,11 @@ public class Main
 			}
 		}
 		
-		// run TMSK/RIKTEXT
+/*		// run TMSK/RIKTEXT
 		String tmPropsPath = paths.getProperty("tmsk_properties");
-		TextMiner tm = new TextMiner(corpusPath, tmPropsPath);
+		TextMiner tm = new TextMiner(corpusPath, tmPropsPath);*/
 		
-		// grab classifications and reconstruct Bookmarks file
-		ChromeBookmarksIO.write(bookmarksFilePath, bookmarks);
+		// reconstruct Bookmarks file with labeled test bookmarks
+		cbe.updateTestBookmarks(testBookmarks);
 	}
 }
-*/
