@@ -16,12 +16,13 @@ import org.w3c.dom.Element;
 
 public class XMLFileIO
 {
-	public static final String XML_ROOT = "BookmarkClassifier";
-	public static final String XML_TAG_BOOKMARK = "Bookmark";
-	public static final String XML_ATTR_ID = "Id";
-	public static final String XML_TAG_URL = "Url";
-	public static final String XML_TAG_TITLE = "Title";
-	public static final String XML_TAG_BODY = "Body";
+	public static final String XML_ROOT = "BOOKMARKCLASSIFIER";
+	public static final String XML_TAG_BOOKMARK = "BOOKMARK";
+	public static final String XML_ATTR_ID = "ID";
+	public static final String XML_TAG_URL = "URL";
+	public static final String XML_TAG_TITLE = "TITLE";
+	public static final String XML_TAG_BODY = "BODY";
+	public static final String XML_TAG_LABEL = "LABEL";
 	
 	public static void write(List<Bookmark> bookmarks, String filePath)
 	{
@@ -58,6 +59,13 @@ public class XMLFileIO
 				Element body = doc.createElement(XML_TAG_BODY);
 				body.appendChild(doc.createTextNode(bookmark.body));
 				bmElement.appendChild(body);
+				
+				// label element
+				if (bookmark.label != null) {
+					Element label = doc.createElement(XML_TAG_LABEL);
+					label.appendChild(doc.createTextNode(bookmark.label));
+					bmElement.appendChild(label);
+				}
 			}
 				
 			// write the content into xml file
